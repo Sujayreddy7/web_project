@@ -87,9 +87,11 @@ class AskQuestionView(APIView):
             return Response({"error": "Both content and question are required"}, status=status.HTTP_400_BAD_REQUEST)
         
         try:
+            print(f"DEBUG: Asking question. Content length: {len(content)}, Question: {question}")
             answer = answer_question_from_notes(content, question)
             return Response({"answer": answer})
         except Exception as e:
+            print(f"DEBUG ERROR: In AskQuestionView: {str(e)}")
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class GenerateStudyPlanView(APIView):
@@ -103,7 +105,9 @@ class GenerateStudyPlanView(APIView):
             return Response({"error": "Subjects and deadline are required"}, status=status.HTTP_400_BAD_REQUEST)
         
         try:
+            print(f"DEBUG: Generating study plan. Subjects: {subjects}, Deadline: {deadline}")
             plan = generate_study_plan(subjects, deadline)
             return Response({"plan": plan})
         except Exception as e:
+            print(f"DEBUG ERROR: In GenerateStudyPlanView: {str(e)}")
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
