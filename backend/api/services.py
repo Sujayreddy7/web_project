@@ -21,14 +21,18 @@ def get_llm():
     last_err = None
     for model_name in models_to_try:
         try:
+            print(f"DEBUG: Trying model {model_name}...")
             llm = ChatGoogleGenerativeAI(model=model_name, google_api_key=api_key)
-            # Try a very cheap invocation to verify model existence (optional, but let's just return it for now)
+            # We must actually invoke it to see if the name is valid in your account
+            llm.invoke("ping") 
+            print(f"DEBUG: Successfully connected to {model_name}")
             return llm
         except Exception as e:
+            print(f"DEBUG: Model {model_name} failed: {str(e)}")
             last_err = e
             continue
             
-    raise last_err if last_err else RuntimeError("No Gemini models available")
+    raise last_err if last_err else RuntimeError("No Gemini models available in your account")
 
 def summarize_note_content(content: str) -> str:
     llm = get_llm()
