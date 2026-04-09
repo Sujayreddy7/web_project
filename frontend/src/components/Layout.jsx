@@ -1,8 +1,9 @@
 import React from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, BookText, CheckSquare, Calendar, Sparkles, LogOut } from 'lucide-react';
 
 const Layout = () => {
+  const navigate = useNavigate();
   return (
     <div className="app-layout">
       {/* Sidebar */}
@@ -84,7 +85,7 @@ const Layout = () => {
             onClick={() => {
               localStorage.removeItem('access_token');
               localStorage.removeItem('refresh_token');
-              window.location.href = '/login';
+              navigate('/login');
             }}
           >
             <LogOut size={16} /> Logout
