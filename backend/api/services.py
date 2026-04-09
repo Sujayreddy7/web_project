@@ -9,8 +9,26 @@ def get_llm():
     api_key = os.getenv('GEMINI_API_KEY')
     if not api_key:
         raise RuntimeError('GEMINI_API_KEY is missing')
-    model_name = os.getenv('GEMINI_MODEL', 'gemini-1.5-flash')
-    return ChatGoogleGenerativeAI(model=model_name, google_api_key=api_key)
+    
+    # List of models to try in order of preference.
+    # gemini-2.0-flash was verified in this account's model list.
+    models_to_try = [
+        os.getenv('GEMINI_MODEL', 'gemini-2.0-flash'),
+        'gemini-flash-latest',
+        'gemini-pro-latest'
+    ]
+    
+    last_err = None
+    for model_name in models_to_try:
+        try:
+            llm = ChatGoogleGenerativeAI(model=model_name, google_api_key=api_key)
+            # Try a very cheap invocation to verify model existence (optional, but let's just return it for now)
+            return llm
+        except Exception as e:
+            last_err = e
+            continue
+            
+    raise last_err if last_err else RuntimeError("No Gemini models available")
 
 def summarize_note_content(content: str) -> str:
     llm = get_llm()
