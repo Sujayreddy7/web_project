@@ -6,8 +6,11 @@ from langchain_core.output_parsers import StrOutputParser
 # By default, use a placeholder if api key is missing to prevent startup crash,
 # but the methods will fail if invoked without a real key.
 def get_llm():
-    api_key = os.environ.get("GEMINI_API_KEY", "dummy-key-for-local-dev")
-    return ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=api_key)
+    api_key = os.getenv('GEMINI_API_KEY')
+    if not api_key:
+        raise RuntimeError('GEMINI_API_KEY is missing')
+    model_name = os.getenv('GEMINI_MODEL', 'gemini-1.5-flash')
+    return ChatGoogleGenerativeAI(model=model_name, google_api_key=api_key)
 
 def summarize_note_content(content: str) -> str:
     llm = get_llm()

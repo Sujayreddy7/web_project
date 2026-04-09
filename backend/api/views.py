@@ -55,26 +55,26 @@ class SummarizeNoteView(APIView):
         content = request.data.get("content")
         note_id = request.data.get("note_id")
         note_instance = None
-
+        print(f"DEBUG: SummarizeNoteView called with content length {len(content) if content else 0}, note_id={note_id}")
         if note_id:
             try:
                 note_instance = Note.objects.get(id=note_id, user=request.user)
                 content = note_instance.content
             except Note.DoesNotExist:
                 return Response({"error": "Note not found"}, status=status.HTTP_404_NOT_FOUND)
-
         if not content:
             return Response({"error": "Content or note_id is required"}, status=status.HTTP_400_BAD_REQUEST)
-        
         try:
             summary = summarize_note_content(content)
-            
             if note_instance:
                 note_instance.summary = summary
                 note_instance.save()
-                
             return Response({"summary": summary})
+        except PermissionError as perm_err:
+            print(f"DEBUG ERROR: PermissionError in SummarizeNoteView: {perm_err}")
+            return Response({"error": "Invalid or revoked Gemini API key"}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
+            print(f"DEBUG ERROR: Exception in SummarizeNoteView: {e}")
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class AskQuestionView(APIView):
@@ -83,15 +83,17 @@ class AskQuestionView(APIView):
     def post(self, request):
         content = request.data.get("content")
         question = request.data.get("question")
+        print(f"DEBUG: AskQuestionView called with content length {len(content) if content else 0}, question='{question}'")
         if not content or not question:
             return Response({"error": "Both content and question are required"}, status=status.HTTP_400_BAD_REQUEST)
-        
         try:
-            print(f"DEBUG: Asking question. Content length: {len(content)}, Question: {question}")
             answer = answer_question_from_notes(content, question)
             return Response({"answer": answer})
+        except PermissionError as perm_err:
+            print(f"DEBUG ERROR: PermissionError in AskQuestionView: {perm_err}")
+            return Response({"error": "Invalid or revoked Gemini API key"}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
-            print(f"DEBUG ERROR: In AskQuestionView: {str(e)}")
+            print(f"DEBUG ERROR: Exception in AskQuestionView: {e}")
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class GenerateStudyPlanView(APIView):
@@ -100,14 +102,15 @@ class GenerateStudyPlanView(APIView):
     def post(self, request):
         subjects = request.data.get("subjects")
         deadline = request.data.get("deadline")
-        
+        print(f"DEBUG: GenerateStudyPlanView called with subjects={subjects}, deadline={deadline}")
         if not subjects or not deadline:
             return Response({"error": "Subjects and deadline are required"}, status=status.HTTP_400_BAD_REQUEST)
-        
         try:
-            print(f"DEBUG: Generating study plan. Subjects: {subjects}, Deadline: {deadline}")
             plan = generate_study_plan(subjects, deadline)
             return Response({"plan": plan})
+        except PermissionError as perm_err:
+            print(f"DEBUG ERROR: PermissionError in GenerateStudyPlanView: {perm_err}")
+            return Response({"error": "Invalid or revoked Gemini API key"}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
-            print(f"DEBUG ERROR: In GenerateStudyPlanView: {str(e)}")
+            print(f"DEBUG ERROR: Exception in GenerateStudyPlanView: {e}")
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
