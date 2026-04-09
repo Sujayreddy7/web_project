@@ -99,6 +99,12 @@ DATABASES = {
 db_from_env = dj_database_url.config(conn_max_age=500)
 if db_from_env:
     DATABASES['default'].update(db_from_env)
+    # TiDB Serverless requires an explicit SSL configuration to connect
+    if 'mysql' in DATABASES['default']['ENGINE']:
+        DATABASES['default']['OPTIONS'] = {
+            'ssl': {'ca': '/etc/ssl/certs/ca-certificates.crt'},
+            'ssl_mode': 'VERIFY_IDENTITY'
+        }
 
 CORS_ALLOW_ALL_ORIGINS = True
 
