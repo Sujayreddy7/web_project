@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { loginUser } from '../services/api';
 import { LogIn } from 'lucide-react';
+import ThemeToggle from '../components/ThemeToggle';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -34,7 +35,10 @@ const Login = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-color)', padding: '1rem' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-color)', padding: '1rem', position: 'relative' }}>
+      <div style={{ position: 'absolute', top: '1.5rem', right: '1.5rem' }}>
+        <ThemeToggle />
+      </div>
       <div className="card" style={{ maxWidth: '400px', width: '100%', padding: '2rem' }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <h2 className="text-2xl font-bold" style={{ color: 'var(--primary-color)' }}>StudyGenie AI</h2>

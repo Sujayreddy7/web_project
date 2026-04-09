@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, BookText, CheckSquare, Calendar, Sparkles, LogOut } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -79,8 +80,10 @@ const Layout = () => {
       <main className="main-content">
         <header className="header">
           <div className="text-muted">Welcome back!</div>
-          <button 
-            className="btn-outline flex items-center gap-2" 
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <ThemeToggle />
+            <button 
+              className="btn-outline flex items-center gap-2" 
             style={{ padding: '0.5rem 1rem' }}
             onClick={() => {
               localStorage.removeItem('access_token');
@@ -89,7 +92,8 @@ const Layout = () => {
             }}
           >
             <LogOut size={16} /> Logout
-          </button>
+            </button>
+          </div>
         </header>
         <div style={{ flex: 1, overflowY: 'auto' }}>
           <Outlet />
