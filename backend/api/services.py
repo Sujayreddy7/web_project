@@ -11,11 +11,12 @@ def get_llm():
         raise RuntimeError('GEMINI_API_KEY is missing')
     
     # List of models to try in order of preference.
-    # gemini-2.0-flash was verified in this account's model list.
+    # gemini-2.0-flash is the latest fast model.
+    # gemini-pro is the most stable fallback.
     models_to_try = [
         os.getenv('GEMINI_MODEL', 'gemini-2.0-flash'),
-        'gemini-flash-latest',
-        'gemini-pro-latest'
+        'gemini-pro',
+        'gemini-flash-latest'
     ]
     
     last_err = None

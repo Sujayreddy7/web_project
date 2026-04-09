@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .views import NoteViewSet, TaskViewSet, DailyGoalViewSet, StudyPlanViewSet
-from .views import SummarizeNoteView, AskQuestionView, GenerateStudyPlanView, RegisterView
+from .views import SummarizeNoteView, AskQuestionView, GenerateStudyPlanView, RegisterView, StatusView
 
 router = DefaultRouter()
 router.register(r'notes', NoteViewSet, basename='note')
