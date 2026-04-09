@@ -58,7 +58,7 @@ const Notes = () => {
     if (!content || !question) return;
     setLoading(true);
     try {
-      const res = await askQuestionAI(content, question);
+      const res = await askQuestionAI({ content, question });
       setAnswer(res.data.answer || "No answer generated.");
     } catch(err) {
       setAnswer("Error fetching AI answer.");

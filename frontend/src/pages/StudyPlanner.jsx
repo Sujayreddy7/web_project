@@ -22,7 +22,7 @@ const StudyPlanner = () => {
     setLoading(true);
     try {
       const subjectList = subjects.split(',').map(s => s.trim());
-      const res = await generatePlanAI(subjectList, deadline);
+      const res = await generatePlanAI({ subjects: subjectList, deadline });
       const planText = res.data.plan || "Error generating.";
       setGeneratedPlan(planText);
       
