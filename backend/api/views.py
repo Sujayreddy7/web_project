@@ -52,7 +52,7 @@ class StudyPlanViewSet(BaseUserViewSet):
 class StatusView(APIView):
     permission_classes = [permissions.AllowAny]
     def get(self, request):
-        model_name = os.getenv('GEMINI_MODEL', 'gemini-2.0-flash')
+        model_name = os.getenv('GROQ_MODEL', 'llama-3.3-70b-versatile')
         return Response({
             "status": "online",
             "version": "2.1-robust-fallback",
@@ -83,7 +83,7 @@ class SummarizeNoteView(APIView):
             return Response({"summary": summary})
         except PermissionError as perm_err:
             print(f"DEBUG ERROR: PermissionError in SummarizeNoteView: {perm_err}")
-            return Response({"error": "Invalid or revoked Gemini API key"}, status=status.HTTP_403_FORBIDDEN)
+            return Response({"error": "Invalid or revoked Groq API key"}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             print(f"DEBUG ERROR: Exception in SummarizeNoteView: {e}")
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -102,7 +102,7 @@ class AskQuestionView(APIView):
             return Response({"answer": answer})
         except PermissionError as perm_err:
             print(f"DEBUG ERROR: PermissionError in AskQuestionView: {perm_err}")
-            return Response({"error": "Invalid or revoked Gemini API key"}, status=status.HTTP_403_FORBIDDEN)
+            return Response({"error": "Invalid or revoked Groq API key"}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             print(f"DEBUG ERROR: Exception in AskQuestionView: {e}")
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -121,7 +121,7 @@ class GenerateStudyPlanView(APIView):
             return Response({"plan": plan})
         except PermissionError as perm_err:
             print(f"DEBUG ERROR: PermissionError in GenerateStudyPlanView: {perm_err}")
-            return Response({"error": "Invalid or revoked Gemini API key"}, status=status.HTTP_403_FORBIDDEN)
+            return Response({"error": "Invalid or revoked Groq API key"}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             print(f"DEBUG ERROR: Exception in GenerateStudyPlanView: {e}")
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

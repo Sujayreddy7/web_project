@@ -1,29 +1,28 @@
 import os
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
 # By default, use a placeholder if api key is missing to prevent startup crash,
-# but the methods will fail if invoked without a real key.
+import os
+
 def get_llm():
-    api_key = os.getenv('GEMINI_API_KEY')
+    api_key = os.getenv('GROQ_API_KEY')
     if not api_key:
-        raise RuntimeError('GEMINI_API_KEY is missing')
+        raise RuntimeError('GROQ_API_KEY is missing')
     
     # List of models to try in order of preference.
-    # gemini-2.0-flash is the latest fast model.
-    # gemini-pro is the most stable fallback.
     models_to_try = [
-        os.getenv('GEMINI_MODEL', 'gemini-2.0-flash'),
-        'gemini-pro',
-        'gemini-flash-latest'
+        os.getenv('GROQ_MODEL', 'llama-3.3-70b-versatile'),
+        'llama3-8b-8192',
+        'mixtral-8x7b-32768'
     ]
     
     last_err = None
     for model_name in models_to_try:
         try:
             print(f"DEBUG: Trying model {model_name}...")
-            llm = ChatGoogleGenerativeAI(model=model_name, google_api_key=api_key)
+            llm = ChatGroq(model=model_name, groq_api_key=api_key)
             print(f"DEBUG: Selected model {model_name}")
             return llm
         except Exception as e:
@@ -31,7 +30,7 @@ def get_llm():
             last_err = e
             continue
             
-    raise last_err if last_err else RuntimeError("No Gemini models available in your account")
+    raise last_err if last_err else RuntimeError("No Groq models available in your account")
 
 def summarize_note_content(content: str) -> str:
     llm = get_llm()
