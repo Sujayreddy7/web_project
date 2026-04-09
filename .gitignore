@@ -1,2 +1,22 @@
-/DEPLOYMENT_GUIDE_IN_DEPTH.md
-/LOCAL_SETUP_GUIDE.md
+# Environment Variables
+.env
+.env.local
+.env.*
+
+# Python / Django
+backend/venv/
+backend/__pycache__/
+backend/*.pyc
+backend/db.sqlite3
+backend/media/
+backend/staticfiles/
+
+# Node / React
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.npm/
+
+# OS Files
+.DS_Store
+Thumbs.db
