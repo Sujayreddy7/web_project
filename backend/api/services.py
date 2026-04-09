@@ -24,9 +24,7 @@ def get_llm():
         try:
             print(f"DEBUG: Trying model {model_name}...")
             llm = ChatGoogleGenerativeAI(model=model_name, google_api_key=api_key)
-            # We must actually invoke it to see if the name is valid in your account
-            llm.invoke("ping") 
-            print(f"DEBUG: Successfully connected to {model_name}")
+            print(f"DEBUG: Selected model {model_name}")
             return llm
         except Exception as e:
             print(f"DEBUG: Model {model_name} failed: {str(e)}")
