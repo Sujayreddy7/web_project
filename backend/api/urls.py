@@ -20,6 +20,7 @@ urlpatterns = [
     path('', include(router.urls)),
     
     # AI Custom endpoints
+    path('status/', StatusView.as_view(), name='status'),
     path('ai/summarize/', SummarizeNoteView.as_view(), name='ai-summarize'),
     path('ai/ask/', AskQuestionView.as_view(), name='ai-ask'),
     path('ai/plan/', GenerateStudyPlanView.as_view(), name='ai-plan'),

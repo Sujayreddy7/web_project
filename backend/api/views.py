@@ -48,6 +48,16 @@ class StudyPlanViewSet(BaseUserViewSet):
     queryset = StudyPlan.objects.all()
     serializer_class = StudyPlanSerializer
 
+class StatusView(APIView):
+    permission_classes = [permissions.AllowAny]
+    def get(self, request):
+        model_name = os.getenv('GEMINI_MODEL', 'gemini-2.0-flash')
+        return Response({
+            "status": "online",
+            "version": "2.1-robust-fallback",
+            "configured_model": model_name
+        })
+
 class SummarizeNoteView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
