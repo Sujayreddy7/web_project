@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, BookText, CheckSquare, Calendar, Sparkles, LogOut } from 'lucide-react';
+import { LayoutDashboard, BookText, CheckSquare, Calendar, Sparkles, LogOut, Menu, X } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 
 const Layout = () => {
   const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+
   return (
     <div className="app-layout">
       {/* Sidebar */}
-      <aside className="sidebar" style={{ padding: '2rem 1rem' }}>
+      <aside className={`sidebar ${isMobileMenuOpen ? 'open' : ''}`} style={{ padding: '2rem 1rem' }}>
         <div style={{ marginBottom: '2rem', padding: '0 1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <Sparkles color="var(--primary-color)" />
           <h1 className="font-bold text-2xl" style={{ background: 'linear-gradient(to right, var(--primary-color), var(--secondary-color))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
@@ -16,7 +20,7 @@ const Layout = () => {
           </h1>
         </div>
         
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }} onClick={() => setIsMobileMenuOpen(false)}>
           <NavLink to="/" style={({isActive}) => ({
             padding: '0.75rem 1rem',
             borderRadius: 'var(--radius)',
@@ -79,7 +83,12 @@ const Layout = () => {
       {/* Main Content Area */}
       <main className="main-content">
         <header className="header">
-          <div className="text-muted">Welcome back!</div>
+          <div className="flex items-center gap-2">
+            <button className="mobile-menu-btn" onClick={toggleMobileMenu}>
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+            <div className="text-muted">Welcome back!</div>
+          </div>
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
             <ThemeToggle />
             <button 
